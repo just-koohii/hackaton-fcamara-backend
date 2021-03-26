@@ -1,9 +1,14 @@
+require("dotenv").config({
+  path: `.${process.env.NODE_ENV}.env`,
+});
+
 const express = require("express");
 const morgan = require("morgan");
 const compression = require("compression");
 const cors = require("cors");
 const helmet = require("helmet");
 const routes = require("./routes");
+require("./database");
 
 const app = express();
 
