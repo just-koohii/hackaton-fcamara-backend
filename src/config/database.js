@@ -6,7 +6,6 @@ module.exports = {
   database: process.env.DB_DATABASE,
   define: {
     freezeTableName: true,
-    timestamps: true,
     underscored: true,
   },
 };
