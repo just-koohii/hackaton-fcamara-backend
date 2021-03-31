@@ -1,21 +1,12 @@
-const { Model, DataTypes } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  const Escolas = sequelize.define("Escolas", {
+    nome: DataTypes.STRING,
+    email: DataTypes.STRING,
+    hash_senha: DataTypes.STRING,
+    tipo: DataTypes.STRING,
+  });
 
-class Escolas extends Model {
-  static init(sequelize) {
-    super.init(
-      {
-        nome: DataTypes.STRING,
-        email: DataTypes.STRING,
-        hash_senha: DataTypes.STRING,
-        tipo: DataTypes.STRING,
-      },
-      {
-        sequelize,
-      }
-    );
-  }
-
-  static associate(models) {
+  Escolas.associate = function (models) {
     this.belongsTo(models.Enderecos, {
       foreignKey: "id_endereco",
       as: "endereco_escola",
@@ -24,7 +15,7 @@ class Escolas extends Model {
       foreignKey: "id_escola",
       as: "alunos_escola",
     });
-  }
-}
+  };
 
-module.exports = Escolas;
+  return Escolas;
+};

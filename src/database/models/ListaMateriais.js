@@ -1,18 +1,7 @@
-/* eslint-disable camelcase */
-const { Model } = require("sequelize");
+module.exports = (sequelize) => {
+  const ListaMateriais = sequelize.define("Lista_Materiais", {});
 
-class Lista_Materiais extends Model {
-  static init(sequelize) {
-    super.init(
-      {},
-      {
-        sequelize,
-        tableName: "Lista_Materiais",
-      }
-    );
-  }
-
-  static associate(models) {
+  ListaMateriais.associate = function (models) {
     this.belongsTo(models.Pais, {
       foreignKey: "id_aluno",
       as: "alunos_lista_materiais",
@@ -21,7 +10,7 @@ class Lista_Materiais extends Model {
       foreignKey: "id_material",
       as: "material_lista_materiais",
     });
-  }
-}
+  };
 
-module.exports = Lista_Materiais;
+  return ListaMateriais;
+};

@@ -1,28 +1,19 @@
-const { Model, DataTypes } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  const Materiais = sequelize.define("Materiais", {
+    nome: DataTypes.STRING,
+    preco: DataTypes.FLOAT,
+  });
 
-class Materiais extends Model {
-  static init(sequelize) {
-    super.init(
-      {
-        nome: DataTypes.STRING,
-        preco: DataTypes.FLOAT,
-      },
-      {
-        sequelize,
-      }
-    );
-  }
-
-  static associate(models) {
+  Materiais.associate = function (models) {
     this.belongsTo(models.Categorias, {
       foreignKey: "id_categoria",
       as: "materiais_categorias",
     });
-    this.hasOne(models.ListaMateriais, {
+    this.hasOne(models.Lista_Materiais, {
       foreignKey: "id_material",
       as: "material_lista_materiais",
     });
-  }
-}
+  };
 
-module.exports = Materiais;
+  return Materiais;
+};

@@ -1,20 +1,11 @@
-const { Model, DataTypes } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  const Enderecos = sequelize.define("Enderecos", {
+    logradouro: DataTypes.STRING,
+    cidade: DataTypes.STRING,
+    estado: DataTypes.STRING,
+  });
 
-class Enderecos extends Model {
-  static init(sequelize) {
-    super.init(
-      {
-        logradouro: DataTypes.STRING,
-        cidade: DataTypes.STRING,
-        estado: DataTypes.STRING,
-      },
-      {
-        sequelize,
-      }
-    );
-  }
-
-  static associate(models) {
+  Enderecos.associate = function (models) {
     this.hasMany(models.Pais, {
       foreignKey: "id_endereco",
       as: "endereco_pais",
@@ -27,7 +18,7 @@ class Enderecos extends Model {
       foreignKey: "id_endereco",
       as: "endereco_doador",
     });
-  }
-}
+  };
 
-module.exports = Enderecos;
+  return Enderecos;
+};

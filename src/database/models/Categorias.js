@@ -1,23 +1,14 @@
-const { Model, DataTypes } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  const Categorias = sequelize.define("Categorias", {
+    nome: DataTypes.STRING,
+  });
 
-class Categorias extends Model {
-  static init(sequelize) {
-    super.init(
-      {
-        nome: DataTypes.STRING,
-      },
-      {
-        sequelize,
-      }
-    );
-  }
-
-  static associate(models) {
+  Categorias.associate = function (models) {
     this.hasOne(models.Materiais, {
       foreignKey: "id_categoria",
       as: "materiais_categorias",
     });
-  }
-}
+  };
 
-module.exports = Categorias;
+  return Categorias;
+};

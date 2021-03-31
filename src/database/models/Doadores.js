@@ -1,25 +1,16 @@
-const { Model, DataTypes } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  const Doadores = sequelize.define("Doadores", {
+    nome: DataTypes.STRING,
+    email: DataTypes.STRING,
+    hash_senha: DataTypes.STRING,
+  });
 
-class Doadores extends Model {
-  static init(sequelize) {
-    super.init(
-      {
-        nome: DataTypes.STRING,
-        email: DataTypes.STRING,
-        hash_senha: DataTypes.STRING,
-      },
-      {
-        sequelize,
-      }
-    );
-  }
-
-  static associate(models) {
+  Doadores.associate = function (models) {
     this.belongsTo(models.Enderecos, {
       foreignKey: "id_endereco",
       as: "endereco_doadores",
     });
-  }
-}
+  };
 
-module.exports = Doadores;
+  return Doadores;
+};
