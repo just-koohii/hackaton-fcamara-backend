@@ -1,26 +1,34 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("materiais", {
+    await queryInterface.createTable("Pais", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      nome: {
+      nome_mae: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      nome_pai: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      email: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
       },
-      preco: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
+      hash_senha: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
-      id_categoria: {
+      id_endereco: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "categorias",
+          model: "Enderecos",
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -30,6 +38,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable("materiais");
+    await queryInterface.dropTable("Pais");
   },
 };

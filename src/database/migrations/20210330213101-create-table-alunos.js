@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("doadores", {
+    await queryInterface.createTable("Alunos", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -11,20 +11,21 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      hash_senha: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      id_endereco: {
+      id_pais: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "enderecos",
+          model: "Pais",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      id_escola: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Escolas",
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -34,6 +35,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable("doadores");
+    await queryInterface.dropTable("Alunos");
   },
 };
