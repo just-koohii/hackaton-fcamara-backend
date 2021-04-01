@@ -8,8 +8,9 @@ describe("Endereços", () => {
 
   it("should create item", async () => {
     await Enderecos.create({
-      logradouro: "Rua martim francisco",
-      cidade: "santos",
+      logradouro: "Avenida 9 de abril",
+      numero: "12",
+      cidade: "cubatão",
       estado: "sp",
     });
   });
