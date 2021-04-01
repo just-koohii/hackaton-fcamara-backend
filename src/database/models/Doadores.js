@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 module.exports = (sequelize, DataTypes) => {
   const Doadores = sequelize.define(
@@ -29,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
 
   Doadores.prototype.checkPassword = function (password) {
     return bcrypt.compare(password, this.hash_senha);
+  };
+
+  Doadores.prototype.signToken = function () {
+    return jwt.sign({ id: this.id }, process.env.API_SECRET);
   };
 
   return Doadores;

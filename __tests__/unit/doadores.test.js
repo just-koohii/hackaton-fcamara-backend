@@ -33,7 +33,6 @@ describe("Doadores", () => {
       nome: "lorem ipsum",
       email: "doador@loremipsum.com",
       senha: "123456",
-      tipo: "federal",
       id_endereco: endereco.id,
     });
 

@@ -10,6 +10,7 @@ describe("Escolas", () => {
   it("should create item", async () => {
     const endereco = await Enderecos.create({
       logradouro: "Avenida 9 de abril",
+      numero: "12",
       cidade: "cubatão",
       estado: "sp",
     });
