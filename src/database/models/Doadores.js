@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Doadores.prototype.checkPassword = function (password) {
-    return bcrypt.compare(password, this.password_hash);
+    return bcrypt.compare(password, this.hash_senha);
   };
 
   return Doadores;

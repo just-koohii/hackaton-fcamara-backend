@@ -2,5 +2,5 @@
     "watch": ["src"],
     "ext": ".js",
     "ignore": ["__tests__"],
-    "exec": "NODE_ENV=dev node ./src"
+    "exec": "node ./src"
   }

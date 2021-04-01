@@ -7,7 +7,7 @@ const morgan = require("morgan");
 const compression = require("compression");
 const cors = require("cors");
 const helmet = require("helmet");
-const routes = require("./routes");
+const consign = require("consign");
 
 class App {
   constructor() {
@@ -33,7 +33,8 @@ class App {
   }
 
   routes() {
-    this.express.use(routes);
+    consign({ cwd: "./src" }).include("routes").into(this.express);
+    // this.express.use(routes);
   }
 }
 

@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Pais.prototype.checkPassword = function (password) {
-    return bcrypt.compare(password, this.password_hash);
+    return bcrypt.compare(password, this.hash_senha);
   };
 
   return Pais;
