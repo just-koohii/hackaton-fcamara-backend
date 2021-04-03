@@ -68,7 +68,7 @@ async function login(req, res) {
 
   const doador = await Doadores.findOne({ where: { email } });
 
-  if (!doador) return res.status(404).send("Doador nao encontrada");
+  if (!doador) return res.status(404).send("Doador nao encontrado");
 
   if (!(await doador.checkPassword(senha)))
     return res.status(401).send("Senha incorreta");
@@ -81,7 +81,26 @@ async function login(req, res) {
   });
 }
 
+async function profile(req, res) {
+  const { id } = req.params;
+
+  const doador = await Doadores.findByPk(id, {
+    attributes: {
+      exclude: ["id", "hash_senha"],
+    },
+    include: {
+      association: "endereco_doadores",
+      attributes: { exclude: ["id"] },
+    },
+  });
+
+  if (!doador) return res.status(404).send("Doador nao encontrado");
+
+  return res.send(doador);
+}
+
 module.exports = {
   store,
   login,
+  profile,
 };
