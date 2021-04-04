@@ -37,7 +37,9 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Pais.prototype.signToken = function () {
-    return jwt.sign({ id: this.id }, process.env.API_SECRET);
+    return jwt.sign({ id: this.id }, process.env.API_SECRET, {
+      expiresIn: "4 hours",
+    });
   };
 
   return Pais;

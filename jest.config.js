@@ -84,6 +84,7 @@ module.exports = {
   moduleNameMapper: {
     "^@models(.*)$": "<rootDir>/src/database/models",
     "@utils/(.*)": "<rootDir>/src/utils/$1",
+    "@middlewares/(.*)": "<rootDir>/src/utils/$1",
     "@controllers(.*)$": "<rootDir>/src/controllers",
   },
 

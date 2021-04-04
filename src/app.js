@@ -4,6 +4,7 @@ require("dotenv").config({
 
 const express = require("express");
 const morgan = require("morgan");
+const chalk = require("chalk");
 const compression = require("compression");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -18,7 +19,11 @@ class App {
   }
 
   middlewares() {
-    this.express.use(morgan("combined"));
+    this.express.use(
+      morgan(
+        chalk`{yellow :method} :url {green :status} :response-time ms - :res[content-length]`
+      )
+    );
     this.express.use(express.json());
     this.express.use(compression());
     this.express.use(helmet());
@@ -33,8 +38,9 @@ class App {
   }
 
   routes() {
-    consign({ cwd: "./src" }).include("routes").into(this.express);
-    // this.express.use(routes);
+    consign({ cwd: "./src", verbose: false })
+      .include("routes")
+      .into(this.express);
   }
 }
 
