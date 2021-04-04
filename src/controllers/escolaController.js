@@ -84,7 +84,26 @@ async function login(req, res) {
   });
 }
 
+async function profile(req, res) {
+  const { id } = req.params;
+
+  const escola = await Escolas.findByPk(id, {
+    attributes: {
+      exclude: ["id", "hash_senha"],
+    },
+    include: {
+      association: "endereco_escola",
+      attributes: { exclude: ["id"] },
+    },
+  });
+
+  if (!escola) return res.status(404).send("Escola nao encontrada");
+
+  return res.send(escola);
+}
+
 module.exports = {
   store,
   login,
+  profile,
 };

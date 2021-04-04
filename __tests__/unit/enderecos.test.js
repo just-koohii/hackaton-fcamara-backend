@@ -1,5 +1,5 @@
 const { Enderecos } = require("@models");
-const truncate = require("../../src/utils/truncate");
+const truncate = require("@utils/truncate");
 
 describe("Endereços", () => {
   beforeEach(async () => {
