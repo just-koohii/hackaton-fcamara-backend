@@ -8,10 +8,16 @@ async function index(req, res) {
       attributes: {
         exclude: ["email", "hash_senha", "id_endereco"],
       },
-      include: {
-        association: "endereco_escola",
-        attributes: { exclude: ["id"] },
-      },
+      include: [
+        {
+          association: "endereco",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          association: "pais",
+          attributes: { exclude: ["id"] },
+        },
+      ],
     });
 
     if (!escolas) return res.status(404).send("Nenhuma escola foi encontrada");
@@ -34,7 +40,7 @@ async function search(req, res) {
         exclude: ["email", "hash_senha", "id_endereco"],
       },
       include: {
-        association: "endereco_escola",
+        association: "endereco",
         attributes: { exclude: ["id"] },
       },
     });
@@ -210,7 +216,7 @@ async function profile(req, res) {
         exclude: ["id", "hash_senha"],
       },
       include: {
-        association: "endereco_escola",
+        association: "endereco",
         attributes: { exclude: ["id"] },
       },
     });

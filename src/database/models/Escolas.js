@@ -25,11 +25,16 @@ module.exports = (sequelize, DataTypes) => {
   Escolas.associate = function (models) {
     this.belongsTo(models.Enderecos, {
       foreignKey: "id_endereco",
-      as: "endereco_escola",
+      as: "endereco",
     });
     this.hasMany(models.Alunos, {
       foreignKey: "id_escola",
-      as: "alunos_escola",
+      as: "alunos",
+    });
+    this.belongsToMany(models.Pais, {
+      foreignKey: "id_escola",
+      through: "Escola-Pais",
+      as: "pais",
     });
   };
 

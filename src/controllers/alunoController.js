@@ -16,7 +16,7 @@ async function store(req, res) {
         exclude: ["hash_senha", "id_endereco"],
       },
       include: {
-        association: "endereco_pais",
+        association: "endereco",
         attributes: {
           exclude: ["id"],
         },
@@ -34,12 +34,6 @@ async function store(req, res) {
         id_escola,
       });
 
-      /*
-
-      */
-
-      console.log(pais.endereco_pais);
-
       return res.send({
         id: newAluno.id,
         nome: newAluno.nome,
@@ -48,8 +42,8 @@ async function store(req, res) {
           nome_pai: pais.nome_pai,
           email: pais.email,
           id_escola: pais.id_escola,
-          endereco_pais: {
-            ...pais.endereco_pais.dataValues,
+          endereco: {
+            ...pais.endereco.dataValues,
           },
         },
       });

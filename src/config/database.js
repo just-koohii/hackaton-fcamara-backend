@@ -1,8 +1,7 @@
-/* eslint-disable no-console */
 require("dotenv").config({
   path: `.${process.env.NODE_ENV}.env`,
 });
-const { database } = require("@utils/loggers");
+const { database } = require("../utils/loggers");
 
 module.exports = {
   dialect: process.env.DB_DIALECT,

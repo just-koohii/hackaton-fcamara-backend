@@ -6,15 +6,17 @@ module.exports = (sequelize, DataTypes) => {
   Alunos.associate = function (models) {
     this.belongsTo(models.Pais, {
       foreignKey: "id_pais",
-      as: "alunos_pais",
+      as: "pais",
     });
+
     this.belongsTo(models.Escolas, {
       foreignKey: "id_escola",
-      as: "alunos_escola",
+      as: "escola",
     });
-    this.hasOne(models.Lista_Materiais, {
+
+    this.hasOne(models.ListaMateriais, {
       foreignKey: "id_aluno",
-      as: "alunos_lista_materiais",
+      as: "lista",
     });
   };
 

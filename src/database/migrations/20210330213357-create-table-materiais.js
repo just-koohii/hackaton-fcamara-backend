@@ -12,20 +12,6 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      preco: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-      },
-      id_categoria: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Categorias",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      },
     });
   },
 

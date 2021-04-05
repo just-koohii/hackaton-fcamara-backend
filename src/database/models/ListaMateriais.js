@@ -1,14 +1,23 @@
-module.exports = (sequelize) => {
-  const ListaMateriais = sequelize.define("Lista_Materiais", {});
+module.exports = (sequelize, DataTypes) => {
+  const ListaMateriais = sequelize.define(
+    "ListaMateriais",
+    {
+      quantidade: DataTypes.INTEGER,
+    },
+    {
+      tableName: "Lista-Materiais",
+    }
+  );
 
   ListaMateriais.associate = function (models) {
-    this.belongsTo(models.Pais, {
-      foreignKey: "id_aluno",
-      as: "alunos_lista_materiais",
+    this.belongsTo(models.Escolas, {
+      foreignKey: "id_escola",
+      as: "escola",
     });
+
     this.belongsTo(models.Materiais, {
       foreignKey: "id_material",
-      as: "material_lista_materiais",
+      as: "material",
     });
   };
 

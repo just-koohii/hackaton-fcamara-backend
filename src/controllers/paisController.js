@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-const { Pais, Enderecos, Alunos } = require("@models");
+const { Pais, Enderecos, Alunos, Escolas } = require("@models");
 const { error } = require("@utils/loggers");
 
 async function store(req, res) {
@@ -67,7 +67,7 @@ async function store(req, res) {
     return res.status(400).send("Pais ja cadastrados");
   } catch (err) {
     error(err);
-    return res.status(400).send("Erro do servidor");
+    return res.status(500).send("Erro do servidor");
   }
 }
 
@@ -92,7 +92,7 @@ async function login(req, res) {
     });
   } catch (err) {
     error(err);
-    return res.status(400).send("Erro do servidor");
+    return res.status(500).send("Erro do servidor");
   }
 }
 
@@ -106,11 +106,11 @@ async function profile(req, res) {
       },
       include: [
         {
-          association: "endereco_pais",
+          association: "endereco",
           attributes: { exclude: ["id"] },
         },
         {
-          association: "alunos_pais",
+          association: "alunos",
           attributes: { exclude: ["id"] },
         },
       ],
@@ -121,7 +121,7 @@ async function profile(req, res) {
     return res.send(pais);
   } catch (err) {
     error(err);
-    return res.status(400).send("Erro do servidor");
+    return res.status(500).send("Erro do servidor");
   }
 }
 
@@ -136,7 +136,7 @@ async function listChildren(req, res) {
         id_pais: id,
       },
       attributes: {
-        exclude: ["id_pais", "id_escola"],
+        exclude: ["id_pais"],
       },
       include: {
         association: "alunos_escola",
@@ -157,7 +157,7 @@ async function listChildren(req, res) {
     return res.send(alunos);
   } catch (err) {
     error(err);
-    return res.status(400).send("Erro do servidor");
+    return res.status(500).send("Erro do servidor");
   }
 }
 
@@ -172,7 +172,7 @@ async function searchChild(req, res) {
         id_pais: id,
       },
       attributes: {
-        exclude: ["id_pais", "id_escola"],
+        exclude: ["id_pais"],
       },
       include: {
         association: "alunos_escola",
@@ -193,7 +193,42 @@ async function searchChild(req, res) {
     return res.send(aluno);
   } catch (err) {
     error(err);
-    return res.status(400).send("Erro do servidor");
+    return res.status(500).send("Erro do servidor");
+  }
+}
+
+async function associateSchool(req, res) {
+  try {
+    const { id } = req.params;
+    const { id_escola } = req.body;
+
+    if (!id || !id_escola)
+      return res.status(400).send("IDs não providenciados");
+
+    const pais = await Pais.findByPk(id, {
+      attributes: {
+        exclude: ["hash_senha", "id_endereco"],
+      },
+    });
+
+    if (!pais) return res.status(404).send("Pais não encontrados");
+
+    const escola = await Escolas.findByPk(id_escola, {
+      attributes: {
+        exclude: ["hash_senha", "id_endereco"],
+      },
+    });
+
+    if (!escola) return res.status(404).send("Escola não encontrada");
+
+    const associated = await escola.addPai(pais);
+
+    if (!associated) return res.status(403).send("Escola já vinculada");
+
+    return res.send(associated);
+  } catch (err) {
+    error(err);
+    return res.status(500).send("Erro do servidor");
   }
 }
 
@@ -203,4 +238,5 @@ module.exports = {
   profile,
   listChildren,
   searchChild,
+  associateSchool,
 };
