@@ -6,7 +6,7 @@ const {
   paisController,
 } = require("@controllers");
 
-router.use(bearer);
+router.use("/perfil", bearer);
 
 router.get("/perfil/escola/:id", escolaController.profile);
 router.get("/perfil/doador/:id", doadorController.profile);

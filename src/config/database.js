@@ -2,9 +2,7 @@
 require("dotenv").config({
   path: `.${process.env.NODE_ENV}.env`,
 });
-const chalk = require("chalk");
-
-const logger = (text) => console.log(chalk.inverse.underline.blue(text));
+const { database } = require("@utils/loggers");
 
 module.exports = {
   dialect: process.env.DB_DIALECT,
@@ -12,7 +10,7 @@ module.exports = {
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_DATABASE,
-  logging: process.env.NODE_ENV === "dev" ? logger : false,
+  logging: process.env.NODE_ENV === "dev" ? database : false,
   define: {
     freezeTableName: true,
     underscored: true,
