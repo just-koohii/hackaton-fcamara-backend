@@ -31,10 +31,16 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "id_escola",
       as: "alunos",
     });
+
     this.belongsToMany(models.Pais, {
       foreignKey: "id_escola",
       through: "Escola-Pais",
       as: "pais",
+    });
+
+    this.hasMany(models.ListaMateriais, {
+      foreignKey: "id_escola",
+      as: "listas",
     });
   };
 

@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       as: "escola",
     });
 
-    this.hasOne(models.ListaMateriais, {
+    this.hasMany(models.ListaAluno, {
       foreignKey: "id_aluno",
-      as: "lista",
+      as: "listas",
     });
   };
 

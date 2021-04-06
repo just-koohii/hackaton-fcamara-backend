@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const ListaMateriais = sequelize.define(
     "ListaMateriais",
     {
-      quantidade: DataTypes.INTEGER,
+      ano: DataTypes.INTEGER,
     },
     {
       tableName: "Lista-Materiais",
@@ -15,8 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       as: "escola",
     });
 
-    this.belongsTo(models.Materiais, {
-      foreignKey: "id_material",
+    this.belongsToMany(models.Materiais, {
+      foreignKey: "id_lista",
+      through: models.ListaMaterial,
       as: "material",
     });
   };

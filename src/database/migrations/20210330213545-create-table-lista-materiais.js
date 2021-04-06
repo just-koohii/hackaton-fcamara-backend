@@ -7,7 +7,7 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      quantidade: {
+      ano: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
@@ -16,16 +16,6 @@ module.exports = {
         allowNull: false,
         references: {
           model: "Escolas",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      },
-      id_material: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Materiais",
           key: "id",
         },
         onUpdate: "CASCADE",

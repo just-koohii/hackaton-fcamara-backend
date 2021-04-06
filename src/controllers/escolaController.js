@@ -59,7 +59,7 @@ async function listStudents(req, res) {
     const { id } = req.params;
 
     if (!id) return res.status(400).send("ID não providenciado");
-    // alunos_pais
+
     const alunos = await Alunos.findAll({
       where: {
         id_escola: id,
@@ -68,12 +68,12 @@ async function listStudents(req, res) {
         exclude: ["id_pais", "id_escola"],
       },
       include: {
-        association: "alunos_pais",
+        association: "pais",
         attributes: {
           exclude: ["id", "hash_senha", "id_endereco"],
         },
         include: {
-          association: "endereco_pais",
+          association: "endereco",
           attributes: {
             exclude: ["id"],
           },
@@ -119,7 +119,7 @@ async function store(req, res) {
       email,
       senha,
       logradouro,
-      numero = "S/N",
+      numero,
       cidade,
       estado,
     } = req.body;
@@ -137,7 +137,7 @@ async function store(req, res) {
       if (!endereco) {
         const newEndereco = await Enderecos.create({
           logradouro,
-          numero,
+          numero: !numero ? "S/N" : numero,
           cidade,
           estado,
         });
@@ -213,7 +213,7 @@ async function profile(req, res) {
 
     const escola = await Escolas.findByPk(id, {
       attributes: {
-        exclude: ["id", "hash_senha"],
+        exclude: ["id", "hash_senha", "id_endereco"],
       },
       include: {
         association: "endereco",

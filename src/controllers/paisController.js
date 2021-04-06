@@ -138,18 +138,43 @@ async function listChildren(req, res) {
       attributes: {
         exclude: ["id_pais"],
       },
-      include: {
-        association: "alunos_escola",
-        attributes: {
-          exclude: ["id", "hash_senha", "id_endereco"],
-        },
-        include: {
-          association: "endereco_escola",
+      include: [
+        {
+          association: "escola",
           attributes: {
-            exclude: ["id"],
+            exclude: ["id", "hash_senha", "id_endereco"],
+          },
+          include: {
+            association: "endereco",
+            attributes: {
+              exclude: ["id"],
+            },
           },
         },
-      },
+        {
+          association: "listas",
+          attributes: {
+            exclude: ["id_aluno", "id_material"],
+          },
+          include: [
+            {
+              association: "material",
+            },
+            {
+              association: "lista",
+              attributes: {
+                exclude: ["id_escola"],
+              },
+              include: {
+                association: "material",
+                through: {
+                  attributes: ["quantidade"],
+                },
+              },
+            },
+          ],
+        },
+      ],
     });
 
     if (!alunos) return res.status(404).send("Nenhum aluno foi encontrado");
@@ -221,7 +246,17 @@ async function associateSchool(req, res) {
 
     if (!escola) return res.status(404).send("Escola não encontrada");
 
-    const associated = await escola.addPai(pais);
+    const associated = await escola.addPai(pais, {
+      include: {
+        association: "endereco",
+        attributes: {
+          exclude: ["id"],
+        },
+      },
+      attributes: {
+        exclude: ["id_endereco"],
+      },
+    });
 
     if (!associated) return res.status(403).send("Escola já vinculada");
 

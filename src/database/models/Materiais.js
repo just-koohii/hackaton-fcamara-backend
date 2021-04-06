@@ -4,9 +4,15 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Materiais.associate = function (models) {
-    this.hasMany(models.ListaMateriais, {
+    this.belongsToMany(models.ListaMateriais, {
       foreignKey: "id_material",
-      as: "material",
+      through: models.ListaMaterial,
+      as: "lista",
+    });
+
+    this.hasMany(models.ListaAluno, {
+      foreignKey: "id_material",
+      as: "aluno",
     });
   };
 

@@ -3,15 +3,12 @@ const { promisify } = require("util");
 
 module.exports = async (req, res, next) => {
   const { authorization } = req.headers;
-  console.log(req.params);
 
   if (!authorization) {
     return res.status(401).send("Token inválido");
   }
 
   const [, token] = authorization.split(" ");
-  // console.log(Object.keys(req));
-
   try {
     const decoded = await promisify(jwt.verify)(token, process.env.API_SECRET);
 
@@ -19,7 +16,7 @@ module.exports = async (req, res, next) => {
       return res.status(401).send("Não autorizado");
     }
 
-    return next(req, res, next);
+    return next();
   } catch (err) {
     return res.status(401).send("Token inválido ou expirado");
   }

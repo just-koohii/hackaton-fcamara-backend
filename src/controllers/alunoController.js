@@ -1,6 +1,7 @@
+/* eslint-disable no-return-await */
 /* eslint-disable no-console */
 /* eslint-disable camelcase */
-const { Alunos, Pais } = require("@models");
+const { Alunos, Pais, ListaMateriais, ListaAluno } = require("@models");
 const { error } = require("@utils/loggers");
 
 async function store(req, res) {
@@ -10,7 +11,7 @@ async function store(req, res) {
     if (!nome || !email || !id_escola)
       return res.status(400).send("Dados inválidos");
 
-    const pais = await Pais.findOne({
+    let pais = await Pais.findOne({
       where: { email },
       attributes: {
         exclude: ["hash_senha", "id_endereco"],
@@ -23,29 +24,67 @@ async function store(req, res) {
       },
     });
 
+    const id_pais = pais.id;
+
     if (!pais) return res.status(400).send("Pais não encontrados");
 
-    const aluno = await Alunos.findOne({ where: { nome, id_pais: pais.id } });
+    const aluno = await Alunos.findOne({ where: { nome, id_pais } });
 
     if (!aluno) {
       const newAluno = await Alunos.create({
         nome,
-        id_pais: pais.id,
+        id_pais,
         id_escola,
       });
+
+      pais = await Pais.findOne({
+        attributes: {
+          exclude: ["hash_senha", "id_endereco"],
+        },
+        include: [
+          {
+            association: "filhos",
+            attributes: [],
+            where: { id_pais },
+          },
+          {
+            association: "endereco",
+            attributes: {
+              exclude: ["id"],
+            },
+          },
+        ],
+      });
+
+      //      console.log(newAluno._options.includeMap);
+
+      const listas = await ListaMateriais.findAll({
+        where: { id_escola },
+        include: {
+          association: "material",
+          attributes: {
+            exclude: ["id_escola"],
+          },
+        },
+      });
+
+      if (listas.length !== 0)
+        await Promise.all(
+          listas[0].dataValues.material.map(
+            async ({ ListaMaterial }) =>
+              await ListaAluno.create({
+                id_lista: listas[0].id,
+                id_aluno: newAluno.id,
+                id_material: ListaMaterial.id_material,
+                doado: 0,
+              })
+          )
+        );
 
       return res.send({
         id: newAluno.id,
         nome: newAluno.nome,
-        alunos_pais: {
-          nome_mae: pais.nome_mae,
-          nome_pai: pais.nome_pai,
-          email: pais.email,
-          id_escola: pais.id_escola,
-          endereco: {
-            ...pais.endereco.dataValues,
-          },
-        },
+        pais,
       });
     }
     return res.status(400).send("Aluno já cadastrado");
